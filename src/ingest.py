@@ -1,0 +1,12 @@
+import pandas as pd
+import sys
+
+def load_data(path):
+    df = pd.read_csv(path)
+    print("Rows:", len(df))
+    print("Columns:", list(df.columns))
+    return df
+
+if __name__ == "__main__":
+    path = sys.argv[1] if len(sys.argv) > 1 else "data/synthetic_fb_ads_undergarments.csv"
+    load_data(path)
