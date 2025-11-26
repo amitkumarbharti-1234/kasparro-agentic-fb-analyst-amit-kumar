@@ -1,9 +1,9 @@
 {
-  "total_impressions": 100000,
-  "total_clicks": 1200,
-  "total_spend": 1500.0,
-  "total_conversions": 50,
-  "ctr": 0.012,
-  "cpc": 1.25,
-  "cpa": 30.0
+  "total_impressions": 1190236513,
+  "total_clicks": 15071264,
+  "total_spend": 2105579.9,
+  "total_conversions": 0,
+  "ctr": 0.01266,
+  "cpc": 0.1397,
+  "cpa": null
 }
