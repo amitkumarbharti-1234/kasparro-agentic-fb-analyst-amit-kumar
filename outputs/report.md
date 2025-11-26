@@ -1,30 +1,55 @@
- ## Kasparro Agentic FB Analyst — Final Report
+# Performance Review and Optimization Plan
 
-## Summary
-This report analyzes the performance of Facebook ad creatives for an undergarments brand. The goal is to identify creative patterns, performance variations, and opportunities for optimization to improve CTR, reduce CPA, and increase conversions.
+## Executive Summary
+This report presents an analytical review of Facebook ad performance for an undergarments brand using the provided dataset. The dataset includes more than **1.19 billion impressions**, **15 million clicks**, and **₹2.1 million in ad spend**. The overall CTR is **1.27%**, and the **average CPC is ₹0.14**, indicating strong cost efficiency in generating clicks. Since conversion tracking was not recorded in the dataset, **CPA could not be calculated**, highlighting a critical analytics gap that restricts ROI analysis and spend optimization decisions.
+
+## Key Performance Metrics (Real Dataset)
+| Metric | Value |
+|--------|--------|
+| Total Impressions | 1,190,236,513 |
+| Total Clicks | 15,071,264 |
+| Total Spend | ₹2,105,579.90 |
+| CTR | 1.27% |
+| CPC | ₹0.14 |
+| CPA | Not Available (No conversions column) |
+
+### Metric Definitions
+- **CTR (Click-Through Rate)** = Clicks / Impressions
+- **CPC (Cost Per Click)** = Spend / Clicks
+- **CPA (Cost Per Acquisition)** = Spend / Conversions (Not computable due to missing conversions data)
 
 ## Key Insights
-1. High performing creatives contain discount-focused or comfort-based messaging.
-2. Bottom performing creatives rely on generic or broad headlines with limited clarity.
-3. Spend distribution is skewed towards lower CTR creatives, limiting ROI potential.
-4. CPA variability suggests differences in conversion experience across audiences.
+1. The campaign is generating strong engagement at the top of the funnel, indicated by high impression volume and healthy CTR.
+2. Cost per click performance is extremely efficient at ₹0.14, suggesting effective audience targeting and message relevance.
+3. Without conversion tracking, it is impossible to measure profitability, ROAS, or the impact of different creative themes.
+4. There may be an imbalance between impressions and actual customer outcomes due to missing post-click tracking.
 
-## Recommendations
-- Reallocate 25–30% budget from the lowest performing creatives to top performers.
-- Test stronger value-based headlines such as “30% Off Comfort Fit – Shop Now”.
-- Narrow targeting to top-performing audiences to reduce wasted impressions.
-- Improve landing page speed and clarity to increase conversion efficiency.
-- Run fast A/B tests focused on CTA wording and offer visibility.
+## Actionable Recommendations
+- **Implement conversion tracking** using Meta Pixel or server-side tracking to enable ROI measurement.
+- **Allocate more budget** toward high-CTR creative themes (e.g., comfort & discount-driven messaging).
+- **Refine targeting** by reducing spend on broad audiences that inflate impressions without conversion visibility.
+- **Optimize landing page experience** to improve the post-click journey once conversion data is available.
+- **Introduce structured A/B testing** to validate messaging hypotheses.
 
-## Prioritized Experiment
-Hypothesis: Adding an explicit discount in headline increases CTR and conversions.
+## Proposed A/B Test Strategy
+Hypothesis: Creative headlines emphasizing value (e.g., discount or comfort feature) will increase CTR and drive more conversions once tracking is enabled.
 
-Test Design:
-- Two versions: “Comfort Fit Innerwear” vs “Comfort Fit Innerwear — 30% OFF”
-- 50/50 audience split for 5–7 days
-- Primary Metric: CTR and CPA
-- Success Criteria: +15% CTR lift and -10% CPA reduction
+### Test Plan
+- Variant A: Standard headline
+- Variant B: Offer-based headline (e.g., “Comfort Fit Innerwear — 30% OFF”)
+- Duration: 5–7 days
+- Primary metric: CTR (secondary: CPA once tracking enabled)
+- Expected outcome: +15% improvement in CTR
+
+## Limitations & Next Steps
+- CPA and ROAS cannot be computed due to missing conversion data.
+- Creating a placeholder conversions column was necessary for pipeline consistency but not used in metric calculation.
+- Future work may include:
+  - Creative clustering evaluation for performance themes
+  - Automated insights pipeline with LLM-based creative evaluation
+  - Predictive model for conversion estimation
 
 ## Reference Files
-- insights.json
-- creatives.json
+- outputs/insights.json
+- outputs/creatives.json
+
