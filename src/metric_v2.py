@@ -4,6 +4,7 @@ from utils.logging_utils import get_logger
 
 logger = get_logger("metrics_v2")
 
+
 def compute_basic_kpis(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
@@ -21,7 +22,7 @@ def compute_basic_kpis(df: pd.DataFrame) -> pd.DataFrame:
 
 def split_baseline_current(df: pd.DataFrame):
     """
-    Split data into two halves (baseline = older period, current = recent period).
+    Split data into baseline (older half) and current (recent half)
     """
     df = df.copy()
     n = len(df)
@@ -39,12 +40,25 @@ def split_baseline_current(df: pd.DataFrame):
 
 
 def aggregate_by_segment(df: pd.DataFrame, segment_cols=None) -> pd.DataFrame:
+    """
+    Aggregates performance metrics grouped by provided segment columns.
+    Automatically detects existing segmentation levels.
+    """
     if segment_cols is None:
-        segment_cols = ["campaign_name"]
+        segment_cols = [
+            "campaign_name",
+            "adset_name",
+            "placement",
+            "device_platform"
+        ]
 
+    # detect existing columns
     existing = [c for c in segment_cols if c in df.columns]
+
     if not existing:
-        existing = []
+        logger.warning("No segmentation columns found, falling back to overall rollup.")
+        df["overall"] = "all"
+        existing = ["overall"]
 
     agg = df.groupby(existing, dropna=False).agg(
         impressions=("impressions", "sum"),
@@ -52,7 +66,10 @@ def aggregate_by_segment(df: pd.DataFrame, segment_cols=None) -> pd.DataFrame:
         spend=("spend", "sum")
     ).reset_index()
 
+    # KPIs
     agg["ctr"] = agg["clicks"] / agg["impressions"].replace(0, np.nan)
     agg["cpc"] = agg["spend"] / agg["clicks"].replace(0, np.nan)
+
+    logger.info("Aggregated metrics by segmentation", extra={"segments": existing})
 
     return agg
