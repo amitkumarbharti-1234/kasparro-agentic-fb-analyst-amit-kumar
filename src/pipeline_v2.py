@@ -12,6 +12,7 @@ from creatives_v2 import generate_creatives_from_hypotheses, save_creatives
 
 logger = get_logger("pipeline_v2")
 
+
 def ensure_dirs():
     os.makedirs(CONFIG["output_dir"], exist_ok=True)
     os.makedirs(CONFIG["log_dir"], exist_ok=True)
@@ -27,25 +28,47 @@ def run_pipeline_v2():
         df = pd.read_csv(CONFIG["input_path"])
         logger.info("Loaded dataset", extra={"rows": len(df), "run_id": run_id})
 
+        # schema validation
         validate_schema(df, run_id=run_id)
 
+        # KPI computation
         df_kpi = compute_basic_kpis(df)
 
+        # split into baseline vs current
         baseline_df, current_df = split_baseline_current(df_kpi)
-        baseline_metrics = aggregate_by_segment(baseline_df, ["campaign_name"])
-        current_metrics = aggregate_by_segment(current_df, ["campaign_name"])
 
-        hypotheses = build_hypotheses(baseline_metrics, current_metrics, segment_key="campaign_name")
+        # -------- MULTI-LEVEL SEGMENTATION -----------
+        segment_cols = [
+            "campaign_name",
+            "adset_name",
+            "placement",
+            "device_platform"
+        ]
+
+        baseline_metrics = aggregate_by_segment(baseline_df, segment_cols)
+        current_metrics = aggregate_by_segment(current_df, segment_cols)
+        # ----------------------------------------------
+
+        # build hypotheses
+        hypotheses = build_hypotheses(
+            baseline_metrics,
+            current_metrics,
+            segment_key="campaign_name"
+        )
+
         hypotheses_path = os.path.join(CONFIG["output_dir"], "hypotheses_v2.json")
-
         with open(hypotheses_path, "w") as f:
             json.dump(hypotheses, f, indent=4)
 
+        # generate creatives
         creatives = generate_creatives_from_hypotheses(hypotheses)
         creatives_path = os.path.join(CONFIG["output_dir"], "creatives_v2.json")
         save_creatives(creatives, creatives_path)
 
-        logger.info("V2 pipeline completed successfully", extra={"run_id": run_id})
+        logger.info(
+            "V2 pipeline completed successfully",
+            extra={"run_id": run_id, "hypotheses": len(hypotheses)}
+        )
 
         return {
             "status": "success",
