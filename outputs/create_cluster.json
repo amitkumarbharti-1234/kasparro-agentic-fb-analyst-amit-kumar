@@ -1,0 +1,23 @@
+[
+  {
+    "cluster": 0,
+    "avg_ctr": 0.0231,
+    "avg_cpc": 0.14,
+    "count": 182,
+    "sample_text": "Feel the warmth and softness in every layer."
+  },
+  {
+    "cluster": 1,
+    "avg_ctr": 0.0174,
+    "avg_cpc": 0.21,
+    "count": 129,
+    "sample_text": "Flat 40% OFF — Premium winter innerwear for men."
+  },
+  {
+    "cluster": 2,
+    "avg_ctr": 0.0112,
+    "avg_cpc": 0.28,
+    "count": 96,
+    "sample_text": "Perfect fit for everyday comfort."
+  }
+]
