@@ -3,8 +3,10 @@ import numpy as np
 import pandas as pd
 from utils.logging_utils import get_logger
 from config import CONFIG
+from statistics_v3 import ctr_z_test   # <-- NEW IMPORT
 
 logger = get_logger("evaluator_v2")
+
 
 def classify_impact(rel_delta: float) -> str:
     rel_delta_abs = abs(rel_delta)
@@ -50,6 +52,7 @@ def build_hypotheses(
         base_clicks = row.get("baseline_clicks", 0.0)
         curr_clicks = row.get("current_clicks", 0.0)
 
+        # Skip low-signal data
         if np.isnan(base_ctr) or base_ctr == 0:
             continue
 
@@ -61,6 +64,13 @@ def build_hypotheses(
         impact = classify_impact(rel_delta)
         confidence = estimate_confidence(base_clicks, curr_clicks, rel_delta)
 
+        # -------------------- NEW: Statistical Significance Test --------------------
+        p_value, significant, stat_conf = ctr_z_test(
+            base_clicks, row.get("baseline_impressions", 0),
+            curr_clicks, row.get("current_impressions", 0)
+        )
+        # ---------------------------------------------------------------------------
+
         hypotheses.append({
             "hypothesis": f"CTR changed by {rel_delta:.2%} for segment '{segment}'.",
             "evidence": {
@@ -69,12 +79,13 @@ def build_hypotheses(
                 "ctr_current": float(curr_ctr),
                 "ctr_delta_relative": float(round(rel_delta, 4)),
                 "clicks_baseline": int(base_clicks),
-                "clicks_current": int(curr_clicks)
+                "clicks_current": int(curr_clicks),
+                "p_value": p_value,
+                "significant": significant,
+                "statistical_confidence": f"{stat_conf}%"
             },
             "impact": impact,
             "confidence": confidence
         })
 
-    logger.info("Generated hypotheses", extra={"count": len(hypotheses)})
-
-    return hypotheses
+    logger.info("Gener
