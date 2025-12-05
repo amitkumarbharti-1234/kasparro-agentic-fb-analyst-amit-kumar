@@ -84,6 +84,13 @@ Introduce checkpointing for pipeline state saving.
 Visual dashboards for insights and trends.
 
 Creative clustering using ML models instead of heuristics.
+### Run V2 API (Advanced)
+
+Start the FastAPI server:
+
+bash
+uvicorn src.api_v2:app --reload
+
 
 Example Output Summary (Based on dataset used)
 Metric	Value
@@ -98,6 +105,29 @@ Release Notes (v1.1)
 - Added retry logic with exponential backoff
 - Added schema validation and drift detection
 - Updated documentation and improved engineering clarity
+  ## V2 Improvements (Advanced Production Version)
+
+This version introduces a production-style data → insight → validation → creative pipeline:
+
+- Added `config.py` with config-driven parameters and paths (no magic numbers)
+- Built `metrics_v2.py` for safe KPI calculation, baseline vs current segmentation, and segment aggregation
+- Built `evaluator_v2.py` to generate structured hypotheses with quantified evidence, impact classification, and confidence scores
+- Built `creatives_v2.py` with creatives tightly linked to performance diagnosis (not generic)
+- Full orchestration via `pipeline_v2.py`
+- Added schema validation and safe error handling
+- Added logging with `run_id` traceability for debugging and observability
+- Added FastAPI service (`api_v2.py`) to support CSV upload and pipeline execution via API endpoint `/run`
+
+### Architecture Overview (5 bullets)
+
+1. Validate input schema and enforce required structure
+2. Compute CTR, CPC and other KPIs, then split baseline vs current
+3. Detect performance changes per segment and generate hypotheses with evidence
+4. Score hypotheses by impact and confidence and generate creatives tied to insights
+5. Expose system via API and save structured outputs for analysis and visualization
+
+### Run V2 Pipeline
+
 
 Author
 
