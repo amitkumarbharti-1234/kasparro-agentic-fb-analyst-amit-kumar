@@ -1,0 +1,18 @@
+[
+  {
+    "hypothesis": "CTR changed by -32.11% for segment 'Men ComfortMax Launch'.",
+    "evidence": {
+      "segment": "Men ComfortMax Launch",
+      "ctr_baseline": 0.0182,
+      "ctr_current": 0.0123,
+      "ctr_delta_relative": -0.3211,
+      "clicks_baseline": 43012,
+      "clicks_current": 27011,
+      "p_value": 0.014,
+      "significant": true,
+      "statistical_confidence": "98.6%"
+    },
+    "impact": "high",
+    "confidence": 0.84
+  }
+]
