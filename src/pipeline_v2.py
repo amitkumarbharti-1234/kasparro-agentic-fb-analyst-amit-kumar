@@ -9,6 +9,7 @@ from utils.schema_utils import validate_schema
 from metrics_v2 import compute_basic_kpis, split_baseline_current, aggregate_by_segment
 from evaluator_v2 import build_hypotheses
 from creatives_v2 import generate_creatives_from_hypotheses, save_creatives
+from creative_clustering_v3 import creative_cluster_analysis, save_creative_clusters  # <-- NEW IMPORT
 
 logger = get_logger("pipeline_v2")
 
@@ -28,16 +29,16 @@ def run_pipeline_v2():
         df = pd.read_csv(CONFIG["input_path"])
         logger.info("Loaded dataset", extra={"rows": len(df), "run_id": run_id})
 
-        # schema validation
+        # validate schema
         validate_schema(df, run_id=run_id)
 
-        # KPI computation
+        # compute KPI metrics
         df_kpi = compute_basic_kpis(df)
 
-        # split into baseline vs current
+        # split baseline vs current
         baseline_df, current_df = split_baseline_current(df_kpi)
 
-        # -------- MULTI-LEVEL SEGMENTATION -----------
+        # segmentation columns
         segment_cols = [
             "campaign_name",
             "adset_name",
@@ -47,7 +48,6 @@ def run_pipeline_v2():
 
         baseline_metrics = aggregate_by_segment(baseline_df, segment_cols)
         current_metrics = aggregate_by_segment(current_df, segment_cols)
-        # ----------------------------------------------
 
         # build hypotheses
         hypotheses = build_hypotheses(
@@ -65,16 +65,23 @@ def run_pipeline_v2():
         creatives_path = os.path.join(CONFIG["output_dir"], "creatives_v2.json")
         save_creatives(creatives, creatives_path)
 
+        # -------- CLUSTERING: Creative NLP Grouping --------------
+        cluster_results = creative_cluster_analysis(df_kpi, num_clusters=5)
+        cluster_path = os.path.join(CONFIG["output_dir"], "creative_clusters_v3.json")
+        save_creative_clusters(cluster_results, cluster_path)
+        # -----------------------------------------------------------------
+
         logger.info(
-            "V2 pipeline completed successfully",
-            extra={"run_id": run_id, "hypotheses": len(hypotheses)}
+            "V3 pipeline successfully completed",
+            extra={"run_id": run_id, "hypotheses_count": len(hypotheses)}
         )
 
         return {
             "status": "success",
             "run_id": run_id,
             "hypotheses_path": hypotheses_path,
-            "creatives_path": creatives_path
+            "creatives_path": creatives_path,
+            "cluster_path": cluster_path
         }
 
     except Exception as e:
