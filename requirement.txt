@@ -10,4 +10,8 @@ uvicorn
 scikit-learn
 sentence-transformers
 prophet
+streamlit
+matplotlib
+plotly
+
 
