@@ -1,0 +1,20 @@
+[
+  {
+    "segment": "Men ComfortMax Launch",
+    "linked_hypothesis": "CTR changed by -32.11% for segment 'Men ComfortMax Launch'.",
+    "impact": "high",
+    "confidence": 0.82,
+    "suggested_headline": "Rebuild Engagement for Men ComfortMax Launch",
+    "suggested_primary_text": "CTR dropped significantly. Improve messaging with stronger benefits, urgency, and offer-based value props.",
+    "suggested_call_to_action": "Explore Collection"
+  },
+  {
+    "segment": "Men WarmTouch",
+    "linked_hypothesis": "CTR improved by 18.20% for segment 'Men WarmTouch'.",
+    "impact": "medium",
+    "confidence": 0.71,
+    "suggested_headline": "Scale Winning Creative",
+    "suggested_primary_text": "This segment is performing well. Increase ad budget and launch variants to scale momentum.",
+    "suggested_call_to_action": "Shop Now"
+  }
+]
